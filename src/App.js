@@ -2,9 +2,11 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
+  const STARTINGTIME = 5;
+
   const [stateGame, setStateGame] = useState({
     textArea: "",
-    timeRemaining: 5,
+    timeRemaining: STARTINGTIME,
     wordCount: 0,
     startGame: false,
   });
@@ -25,14 +27,12 @@ function App() {
   }
 
   function newGame() {
-    if (stateGame.timeRemaining > 0) {
-      setStateGame((prev) => ({ ...prev, startGame: true }));
-    }
     setStateGame((prev) => ({
       ...prev,
-      timeRemaining: 5,
+      timeRemaining: STARTINGTIME,
       wordCount: 0,
       textArea: "",
+      startGame: true,
     }));
   }
   useEffect(() => {
@@ -50,6 +50,7 @@ function App() {
   useEffect(() => {
     if (stateGame.timeRemaining === 0) {
       calculateWordCount();
+      setStateGame((prev) => ({ ...prev, startGame: false }));
     }
   }, [stateGame.textArea, stateGame.timeRemaining]);
 
@@ -79,7 +80,9 @@ function App() {
         disabled={stateGame.timeRemaining === 0}
       />
       <h4>Time Remaining: {stateGame.timeRemaining}</h4>
-      <button onClick={newGame}>start Game</button>
+      <button onClick={newGame} disabled={stateGame.startGame}>
+        start Game
+      </button>
       <h1>
         Word Count:
         {stateGame.wordCount ? stateGame.wordCount : "??"}{" "}
@@ -90,7 +93,9 @@ function App() {
 
 export default App;
 
-//  Word Count:
-//         {stateGame.wordCount !== 0 && stateGame.timeRemaining === 0
-//           ? stateGame.wordCount
-//           : "??"}{" "}
+// function startAgain() {
+//   setIsTimeRunning(true);
+//   setTimeRemaining(5);
+//   setText("");
+//   setWordCount(0);
+// }
