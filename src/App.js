@@ -1,8 +1,9 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function App() {
   const STARTINGTIME = 5;
+  const textAreaRef = useRef(null);
 
   const [stateGame, setStateGame] = useState({
     textArea: "",
@@ -10,8 +11,6 @@ function App() {
     wordCount: 0,
     startGame: false,
   });
-
-  console.log(stateGame.textArea.length);
 
   function handleTextArea(e) {
     const { value } = e.target;
@@ -27,6 +26,8 @@ function App() {
   }
 
   function newGame() {
+    textAreaRef.current.disabled = false;
+    textAreaRef.current.focus();
     setStateGame((prev) => ({
       ...prev,
       timeRemaining: STARTINGTIME,
@@ -73,6 +74,7 @@ function App() {
     <>
       <h1>How fast do you type?</h1>
       <textarea
+        ref={textAreaRef}
         name="textArea"
         value={stateGame.textArea}
         placeholder="let me see those typing skills"
@@ -92,10 +94,3 @@ function App() {
 }
 
 export default App;
-
-// function startAgain() {
-//   setIsTimeRunning(true);
-//   setTimeRemaining(5);
-//   setText("");
-//   setWordCount(0);
-// }
